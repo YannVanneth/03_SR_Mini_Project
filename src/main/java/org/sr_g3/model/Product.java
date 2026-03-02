@@ -1,15 +1,9 @@
 package org.sr_g3.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 
-@Data
-@Setter
-@Getter
 public class Product {
 
     private long product_id;
@@ -26,5 +20,47 @@ public class Product {
         this.quantity = quantity;
         this.imported_date = imported_date;
     }
+
+    public long getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(long product_id) {
+        this.product_id = product_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getUnit_price() {
+        return unit_price;
+    }
+
+    public void setUnit_price(double unit_price) {
+        this.unit_price = unit_price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public LocalDate getImported_date() {
+        return imported_date;
+    }
+
+    public void setImported_date(LocalDate imported_date) {
+        this.imported_date = imported_date;
+    }
+
+
 
 }

@@ -1,19 +1,24 @@
 package org.sr_g3;
 
 import org.sr_g3.config.app.StockManagementSystem;
-import org.sr_g3.dao.StockManagementDao;
 import org.sr_g3.dao.StockManagmentDaoImpl;
-import org.sr_g3.model.Product;
-import org.sr_g3.utils.ConnectionUtil;
+import org.sr_g3.utils.ProductTableDesign;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        StockManagmentDaoImpl stockManagementDao = new StockManagmentDaoImpl();
+
+
+        ProductTableDesign.printTable(stockManagementDao.fetchStock(5,0),1,1);
+
+        sc.nextLine();
+        ProductTableDesign.printTable(stockManagementDao.fetchStock(5,5),1,1);
+
+
 
         StockManagementSystem.run(args);
     }
