@@ -9,9 +9,7 @@ public abstract class Console {
     }
 
     public static void print(String message,String pattern, int length){
-        print(pattern.repeat(length/2)
-                + " " + message + " "
-                + pattern.repeat(length/2));
+        print(pattern.repeat(length/2) + " "  + message + " " + pattern.repeat(length/2));
     }
 
     public static void print(String message, String pattern, int length, String headerColor, String lineColor){
