@@ -1,5 +1,7 @@
 package org.sr_g3.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,15 +10,18 @@ import java.sql.SQLException;
 public class ConnectionUtil {
 
     public static Connection getDbCon() throws SQLException, ClassNotFoundException {
+
+        Dotenv dotenv = Dotenv.load();
         //set up db connection
-        String hostname = "localhost";
-        String name = "postgres";
-        String password = "admin123";
-        String database = "stockmanagementdb";
+        String hostname = dotenv.get("DB_HOST");
+        String database = dotenv.get("DB_NAME");
+        String username = dotenv.get("DB_USER");
+        String password = dotenv.get("DB_PASSWORD");
+
         String url = "jdbc:postgresql://" + hostname + "/" + database;
 
         //return connection
-        return DriverManager.getConnection(url, name, password);
+        return DriverManager.getConnection(url, username, password);
 
     }
 }

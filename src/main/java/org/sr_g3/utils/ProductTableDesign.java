@@ -3,11 +3,13 @@ import org.nocrala.tools.texttablefmt.BorderStyle;
 import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
+import org.sr_g3.model.Product;
+
 import java.util.List;
 
 public class ProductTableDesign {
 
-    public static void printTable(List<String[]> products,
+    public static void printTable(List<Product> products,
                                   int currentPage,
                                   int totalPages) {
 
@@ -20,9 +22,9 @@ public class ProductTableDesign {
         table.setColumnWidth(3, 10, 10);  // QTY
         table.setColumnWidth(4, 15, 20);  // Import Date
 
-        CellStyle center = new CellStyle(CellStyle.HorizontalAlign.center);
-        CellStyle left = new CellStyle(CellStyle.HorizontalAlign.left);
-        CellStyle right = new CellStyle(CellStyle.HorizontalAlign.right);
+        CellStyle center = new CellStyle(CellStyle.HorizontalAlign.CENTER);
+        CellStyle left = new CellStyle(CellStyle.HorizontalAlign.LEFT);
+        CellStyle right = new CellStyle(CellStyle.HorizontalAlign.RIGHT);
 
         // ===== Header =====
         table.addCell("ID", center);
@@ -32,12 +34,12 @@ public class ProductTableDesign {
         table.addCell("Import Date", center);
 
         // ===== Data =====
-        for (String[] product : products) {
-            table.addCell(product[0], center);
-            table.addCell(product[1], left);
-            table.addCell(product[2], right);
-            table.addCell(product[3], right);
-            table.addCell(product[4], center);
+        for (Product product : products) {
+            table.addCell(String.valueOf(product.getProduct_id()), center);
+            table.addCell(product.getName(), center);
+            table.addCell(String.valueOf(product.getUnit_price()), center);
+            table.addCell(String.valueOf(product.getQuantity()), center);
+            table.addCell(String.valueOf(product.getImported_date()), center);
         }
 
         // ===== Footer=====
