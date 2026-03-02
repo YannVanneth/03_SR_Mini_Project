@@ -5,11 +5,10 @@ import org.sr_g3.utils.ConnectionUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-
-public class StockManagmentDaoImpl implements StockManagementDao {
+public class StockManagementDaoImpl implements StockManagementDao {
 
 
     @Override
@@ -82,12 +81,34 @@ public class StockManagmentDaoImpl implements StockManagementDao {
             ps.setDouble(2,product.getUnit_price());
             ps.setInt(3, product.getQuantity());
             ps.setDate(4, java.sql.Date.valueOf(product.getImported_date()));
+            int rs = ps.executeUpdate();
+
+            System.out.println("Row Added: " + rs);
+
+            conn.close();
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException("Error getting stock", e);
+        }
+
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO products(name,unit_price,quantity,imported_date) VALUES ( ?, ?, ?, ?);");
+            ps.setString(1, product.getName());
+            ps.setDouble(2,product.getUnit_price());
+            ps.setInt(3, product.getQuantity());
+            ps.setDate(4, java.sql.Date.valueOf(product.getImported_date()));
             ps.executeUpdate();
             conn.close();
 
         }catch (SQLException | ClassNotFoundException e){
             throw new RuntimeException("Error getting stock", e);
         }
+
+    }
+
+    @Override
+    public void updateStock(Long id, Product product) {
 
     }
 
@@ -157,6 +178,15 @@ public class StockManagmentDaoImpl implements StockManagementDao {
 
     }
 
+    @Override
+    public Optional<Product> getProductById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Product>> searchByName(String name) {
+        return Optional.empty();
+    }
 
 
 }
