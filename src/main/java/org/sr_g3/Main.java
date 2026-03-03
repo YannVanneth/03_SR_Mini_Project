@@ -7,7 +7,7 @@ import org.sr_g3.utils.ProductTableDesign;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
         StockManagmentDaoImpl stockManagementDao = new StockManagmentDaoImpl();
@@ -17,8 +17,6 @@ public class Main {
 
         sc.nextLine();
         ProductTableDesign.printTable(stockManagementDao.fetchStock(5,5),1,1);
-
-
 
         StockManagementSystem.run(args);
     }
