@@ -38,7 +38,7 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
             conn.close();
 
-        }catch (SQLException | ClassNotFoundException e){
+        }catch (Exception e){
             throw new RuntimeException("Error getting stock", e);
         }
 

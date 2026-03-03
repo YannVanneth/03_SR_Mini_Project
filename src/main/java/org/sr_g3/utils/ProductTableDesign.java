@@ -4,8 +4,6 @@ import org.nocrala.tools.texttablefmt.BorderStyle;
 import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
-import org.sr_g3.dao.StockManagementDao;
-import org.sr_g3.dao.StockManagmentDaoImpl;
 import org.sr_g3.model.Product;
 
 import java.util.List;
