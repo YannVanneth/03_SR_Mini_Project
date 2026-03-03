@@ -69,6 +69,14 @@ public class Product {
         this.imported_date = imported_date;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "product_id=" + product_id +
+                ", name='" + name + '\'' +
+                ", unit_price=" + unit_price +
+                ", quantity=" + quantity +
+                ", imported_date=" + imported_date +
+                '}';
+    }
 }
