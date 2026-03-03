@@ -14,7 +14,7 @@ public interface StockManagementDao {
 
     void deleteStock(long id);
 
-
+    Product getStockById(long id);
 
 
 }
