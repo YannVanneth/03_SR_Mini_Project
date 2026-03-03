@@ -110,10 +110,25 @@ public class StockManagementDaoImpl implements StockManagementDao {
     @Override
     public void updateStock(Long id, Product product) {
 
-    }
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement("""
+                    UPDATE products
+                    SET name = ?, unit_price=?, quantity=?, imported_date=?
+                    where id=?;""");
+            ps.setString(1, product.getName());
+            ps.setDouble(2,product.getUnit_price());
+            ps.setInt(3, product.getQuantity());
+            ps.setDate(4, java.sql.Date.valueOf(product.getImported_date()));
+            ps.setLong(5, product.getProduct_id());
 
-    @Override
-    public void updateStock(Product product) {
+
+            ps.executeUpdate();
+            conn.close();
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException("Error Updating Stock", e);
+        }
 
         try {
             Connection conn = ConnectionUtil.getDbCon();
@@ -187,6 +202,4 @@ public class StockManagementDaoImpl implements StockManagementDao {
     public Optional<List<Product>> searchByName(String name) {
         return Optional.empty();
     }
-
-
 }
