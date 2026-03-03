@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(long id) {
-        this.stockManagementDao.deleteStock(id);
+        this.stockManagementDao.deleteStockById(id);
     }
 
     @Override

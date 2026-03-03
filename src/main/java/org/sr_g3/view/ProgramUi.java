@@ -1,7 +1,7 @@
 package org.sr_g3.view;
 
 import org.sr_g3.dao.StockManagementDao;
-import org.sr_g3.dao.StockManagmentDaoImpl;
+import org.sr_g3.dao.StockManagementDaoImpl;
 import org.sr_g3.utils.Colors;
 import org.sr_g3.utils.Console;
 import org.sr_g3.utils.ProductTableDesign;
@@ -9,7 +9,7 @@ import org.sr_g3.utils.Validator;
 
 public class ProgramUi {
 
-    static StockManagementDao stockManagementDao = new StockManagmentDaoImpl();
+    static StockManagementDao stockManagementDao = new StockManagementDaoImpl();
 
     public static void run() {
 
