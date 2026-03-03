@@ -14,5 +14,5 @@ public interface ProductService {
     Optional<List<Product>> getProducts(int limit, int offset);
     Optional<Product> getProductById(long id);
 
-    Optional<List<Product>> searchBy(String keyword);
+    Optional<List<Product>> getProductByName(String name);
 }

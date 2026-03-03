@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 public class ConnectionUtil {
 
+
     public static Connection getDbCon() throws SQLException, ClassNotFoundException {
 
         Dotenv dotenv = Dotenv.load();
