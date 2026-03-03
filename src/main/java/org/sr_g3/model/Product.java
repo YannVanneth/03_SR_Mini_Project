@@ -22,13 +22,6 @@ public class Product {
         this.imported_date = imported_date;
     }
 
-    public Product( String name, double unit_price, int quantity, LocalDate imported_date) {
-        this.name = name;
-        this.unit_price = unit_price;
-        this.quantity = quantity;
-        this.imported_date = imported_date;
-    }
-
     public long getProduct_id() {
         return product_id;
     }
