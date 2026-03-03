@@ -41,8 +41,10 @@ public class StockManagmentDaoImpl implements StockManagementDao {
 
             conn.close();
 
-        }catch (SQLException | ClassNotFoundException e){
+        }catch (SQLException e){
             throw new RuntimeException("Error getting stock", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
         //return as an arraylist
@@ -81,4 +83,34 @@ public class StockManagmentDaoImpl implements StockManagementDao {
     public void deleteStock(long id) {
 
     }
+    @Override
+    public Product getStockById(long id) {
+        Product p = null;
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM products WHERE id = ?");
+            ps.setInt(1, (int)id);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            while(resultSet.next()) {
+                p = new Product(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getDouble("unit_price"),
+                    resultSet.getInt("quantity"),
+                    resultSet.getDate("imported_date").toLocalDate()
+                );
+
+            }
+            return p;
+
+        } catch (SQLException e) {
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return p;
+    }
+
 }
