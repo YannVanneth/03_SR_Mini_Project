@@ -12,6 +12,7 @@ public class Product {
     private int quantity;
     private LocalDate imported_date;
 
+    public Product() {}
 
     public Product(long product_id, String name, double unit_price, int quantity, LocalDate imported_date) {
         this.product_id = product_id;
