@@ -9,13 +9,14 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
         StockManagmentDaoImpl stockManagementDao = new StockManagmentDaoImpl();
 
 
         ProductTableDesign.printTable(stockManagementDao.fetchStock(5,0),1,1);
+
 
 
         ProductTableDesign.printTable(stockManagementDao.fetchStock(30,0),1,1);
