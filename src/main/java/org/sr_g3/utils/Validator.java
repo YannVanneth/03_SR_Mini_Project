@@ -6,6 +6,10 @@ public abstract class Validator {
         return "[A-Za-z]+";
     }
 
+    public static String stringRule(){
+        return "[a-zA-Z]+";
+    }
+
     public static String numberRule(){
         return "[0-9]+";
     }
@@ -97,8 +101,8 @@ public abstract class Validator {
         return true;
     }
 
-    public static String FloatRule(){
-        return "(\\d+|\\d.\\d+)";
+    public static String floatRule(){
+        return "(\\d+|\\d+.\\d+)";
     }
 
 }
