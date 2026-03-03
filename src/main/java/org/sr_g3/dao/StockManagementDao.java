@@ -12,7 +12,9 @@ public interface StockManagementDao {
 
     void updateStock(Product product);
 
-    void deleteStock(long id);
+    void deleteStockById(long id);
+
+    int totalRow();
 
 
 

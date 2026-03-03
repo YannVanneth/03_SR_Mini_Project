@@ -15,7 +15,8 @@ public class Main {
         StockManagmentDaoImpl stockManagementDao = new StockManagmentDaoImpl();
 
 
-        ProductTableDesign.printTable(stockManagementDao.fetchStock(5,0),1,1);
+        ProductTableDesign.printTable(stockManagementDao.fetchStock(30,0),1,1);
+        stockManagementDao.updateStock(new Product(15,"Boom69",12.2d,12, java.time.LocalDate.now()));
 
 
         ProductTableDesign.printTable(stockManagementDao.fetchStock(30,0),1,1);
@@ -24,6 +25,8 @@ public class Main {
         LocalDate LocalDate = null;
 //        stockManagementDao.addStock(new Product("Boom",12.2d,12, java.time.LocalDate.now()));
 //        ProductTableDesign.printTable(stockManagementDao.fetchStock(6,0),1,1);
+//        stockManagementDao.deleteStockById(15);
+//        ProductTableDesign.printTable(stockManagementDao.fetchStock(30,0),1,1);
 
         StockManagementSystem.run(args);
     }

@@ -60,10 +60,7 @@ public class StockManagmentDaoImpl implements StockManagementDao {
             ps.setDouble(2,product.getUnit_price());
             ps.setInt(3, product.getQuantity());
             ps.setDate(4, java.sql.Date.valueOf(product.getImported_date()));
-            int rs = ps.executeUpdate();
-
-            System.out.println("Row Added: " + rs);
-
+            ps.executeUpdate();
             conn.close();
 
         }catch (SQLException | ClassNotFoundException e){
@@ -75,10 +72,69 @@ public class StockManagmentDaoImpl implements StockManagementDao {
     @Override
     public void updateStock(Product product) {
 
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement("""
+                    UPDATE products
+                    SET name = ?, unit_price=?, quantity=?, imported_date=?
+                    where id=?;""");
+            ps.setString(1, product.getName());
+            ps.setDouble(2,product.getUnit_price());
+            ps.setInt(3, product.getQuantity());
+            ps.setDate(4, java.sql.Date.valueOf(product.getImported_date()));
+            ps.setLong(5, product.getProduct_id());
+
+
+            ps.executeUpdate();
+            conn.close();
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException("Error Updating Stock", e);
+        }
+
     }
 
     @Override
-    public void deleteStock(long id) {
+    public void deleteStockById(long id) {
+
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement("""
+                    DELETE FROM products
+                    where id = ?;""");
+            ps.setLong(1, id);
+
+            int rs = ps.executeUpdate();
+            conn.close();
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException("Error Deleting Stock", e);
+        }
 
     }
+
+    @Override
+    public int totalRow() {
+
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement("""
+                    SELECT count(*) from v_all_products;""");
+
+            ResultSet rs = ps.executeQuery();
+
+            int totalRow = rs.getInt(1);
+
+            conn.close();
+
+            return totalRow;
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException("Error Deleting Stock", e);
+        }
+
+    }
+
+
+
 }
