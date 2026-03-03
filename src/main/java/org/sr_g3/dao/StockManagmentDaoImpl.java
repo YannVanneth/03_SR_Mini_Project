@@ -52,6 +52,28 @@ public class StockManagmentDaoImpl implements StockManagementDao {
     }
 
     @Override
+    public int countTotalRecords() {
+
+        try (Connection conn = ConnectionUtil.getDbCon();) {
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT COUNT(*) FROM v_all_products"
+            );
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error counting records", e);
+        }
+
+        return 0;
+    }
+
+    @Override
     public void addStock(Product product) {
 
     }

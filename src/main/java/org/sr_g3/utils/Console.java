@@ -1,5 +1,10 @@
 package org.sr_g3.utils;
 
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public abstract class Console {
@@ -75,5 +80,19 @@ public abstract class Console {
 
     public static String input(String message, String rule){
         return input(message, rule, "Invalid input");
+    }
+
+    public static void displayTableMenu() {
+        List<String> tableMenuOperation = Arrays.asList("Next Page", "Previous Page", "First Page", "Last Page", "Goto");
+        List<String> dataMenuOperation = Arrays.asList("Write", "Read (id)", "Update", "Delete", "Search (name)");
+        List<String> dataMenuOperation2 = Arrays.asList("Save", "Unsaved", "Backup", "Restore","Set rows");
+        print("Menu", "-", 75, Colors.YELLOW, Colors.PINK);
+        tableMenuOperation.forEach((menu) -> System.out.print(Colors.GREEN + menu.charAt(0) + ". " + Colors.WHITE + menu + " ".repeat(5)));
+        System.out.println("\n");
+        dataMenuOperation.forEach((menu) -> System.out.print(Colors.GREEN + menu.charAt(0) + ") " + Colors.WHITE + menu + " ".repeat(6)));
+        System.out.println();
+        dataMenuOperation2.forEach((menu) -> System.out.print(Colors.GREEN + menu.substring(0,2) + ") " + Colors.WHITE + menu + " ".repeat(6)));
+        System.out.println("\n" + Colors.GREEN + "Exit".charAt(0) + ") " + Colors.WHITE + "Exit");
+        System.out.println(Colors.YELLOW + "-".repeat(81) + Colors.WHITE);
     }
 }

@@ -1,46 +1,34 @@
 package org.sr_g3.view;
 
-import org.nocrala.tools.texttablefmt.BorderStyle;
-import org.nocrala.tools.texttablefmt.CellStyle;
-import org.nocrala.tools.texttablefmt.ShownBorders;
-import org.nocrala.tools.texttablefmt.Table;
+import org.sr_g3.dao.StockManagementDao;
+import org.sr_g3.dao.StockManagmentDaoImpl;
 import org.sr_g3.utils.Colors;
 import org.sr_g3.utils.Console;
+import org.sr_g3.utils.ProductTableDesign;
 import org.sr_g3.utils.Validator;
-
-import java.util.Arrays;
-import java.util.List;
-
 
 public class ProgramUi {
 
+    static StockManagementDao stockManagementDao = new StockManagmentDaoImpl();
+
     public static void run() {
 
-    }
-
-    public static void main(String[] args) {
-
-        List<String> tableHeaders = Arrays.asList("ID", "Name", "Unit Price", "Qty", "Import Date");
-
-        Table table = new Table(5, BorderStyle.UNICODE_ROUND_BOX, ShownBorders.ALL);
-        CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.center);
-
-        table.setColumnWidth(0, 15, 25);
-        table.setColumnWidth(1, 25, 25);
-        table.setColumnWidth(2, 20, 25);
-        table.setColumnWidth(3, 18, 25);
-        table.setColumnWidth(4, 20, 25);
-
-        tableHeaders.forEach(str -> table.addCell(Colors.BLUE + str + Colors.WHITE, cellStyle));
+        int limit = 5;
+        int currentPage = 1;
 
         program:
         while (true) {
-            Console.print("Stock Management System", "=", 80, Colors.GREEN, Colors.BLUE);
-            System.out.println(table.render());
+            int offset = (currentPage - 1) * limit;
+            int totalRecords = stockManagementDao.countTotalRecords();
+            int totalPages = (int) Math.ceil((double) totalRecords / limit);
+
+            System.out.println();
+            Console.print("Stock Management System", "=", 57, Colors.GREEN, Colors.BLUE);
+            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages);
+            Console.displayTableMenu();
 
             inputMenuBlock:
             while (true) {
-                System.out.println();
                 String menuInput = Console.input("Please Choose an Option() : ", Validator.CharacterRule(), "Invalid input! please enter only text.");
 
                 if (menuInput == null) {
@@ -52,16 +40,106 @@ public class ProgramUi {
 
                     // Next Page
                     case "N" -> {
-                        System.out.println("next-page");
+                        if (currentPage < totalPages) currentPage++;
+                        else Console.printErrorMessage("You are already on the last page.");
                         break inputMenuBlock;
                     }
 
                     // Previous Page
                     case "P" -> {
-                        System.out.println("previous-page");
+                        if (currentPage > 1) currentPage--;
+                        else Console.printErrorMessage("You are already on the first page.");
                         break inputMenuBlock;
                     }
 
+                    // First Page
+                    case "F" -> {
+                        currentPage = 1;
+                        break inputMenuBlock;
+                    }
+
+                    // Last Page
+                    case "L" -> {
+                        currentPage = totalPages;
+                        break inputMenuBlock;
+                    }
+
+                    // Goto
+                    case "G" -> {
+                        System.out.println("goto-page");
+                        break inputMenuBlock;
+                    }
+
+                    // Write
+                    case "W" -> {
+                        System.out.println("write");
+                        break inputMenuBlock;
+                    }
+
+                    // Read (id)
+                    case "R" -> {
+                        System.out.println("read-by-id");
+                        break inputMenuBlock;
+                    }
+
+                    // Update
+                    case "U" -> {
+                        System.out.println("update");
+                        break inputMenuBlock;
+                    }
+
+                    // Delete
+                    case "D" -> {
+                        System.out.println("delete");
+                        break inputMenuBlock;
+                    }
+
+                    // Search (name)
+                    case "S" -> {
+                        System.out.println("search-by-name");
+                        break inputMenuBlock;
+                    }
+
+                    // Save
+                    case "SA" -> {
+                        System.out.println("save");
+                        break inputMenuBlock;
+                    }
+
+                    // Unsaved
+                    case "UN" -> {
+                        System.out.println("unsaved");
+                        break inputMenuBlock;
+                    }
+
+                    // Backup
+                    case "BA" -> {
+                        System.out.println("backup");
+                        break inputMenuBlock;
+                    }
+
+                    // Restore
+                    case "RE" -> {
+                        System.out.println("restore");
+                        break inputMenuBlock;
+                    }
+
+                    // Set rows
+                    case "SE" -> {
+                        String strNewRowPerPage;
+                        while (true) {
+                            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
+                            if (strNewRowPerPage == null) {
+                                continue;
+                            }
+                            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
+                            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
+                        }
+                        limit = Integer.parseInt(strNewRowPerPage);
+                        break inputMenuBlock;
+                    }
+
+                    // Exit
                     case "E" -> {
                         Console.printSystemMessage("Exiting Application...");
                         break program;
