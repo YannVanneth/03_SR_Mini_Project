@@ -152,10 +152,10 @@ public class StockManagementDaoImpl implements StockManagementDao {
         try{
             var conn = ConnectionUtil.getDbCon();
             var ps = conn.prepareStatement("""
-                        SELECT id,name,unit_price,quantity,imported_date 
+                        SELECT id,name,unit_price,quantity,imported_date\s
                         FROM v_all_products
                         WHERE name LIKE ?
-                        """);
+                       \s""");
 
             var rs = ps.executeQuery();
 

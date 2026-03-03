@@ -1,8 +1,7 @@
 package org.sr_g3;
 
 import org.sr_g3.config.app.StockManagementSystem;
-import org.sr_g3.dao.StockManagementDaoImpl;
-import org.sr_g3.utils.ProductTableDesign;
+import org.sr_g3.utils.DbBackupRestoreUtil;
 
 import java.util.Scanner;
 
@@ -10,19 +9,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
-        StockManagementDaoImpl stockManagementDao = new StockManagementDaoImpl();
+//        DbBackupRestoreUtil.backupPGSQL(3);
 
+//        DbBackupRestoreUtil.restorePGSQL();
 
-        ProductTableDesign.printTable(stockManagementDao.fetchStock(5,0),1,1);
-
-
-
-        ProductTableDesign.printTable(stockManagementDao.fetchStock(30,0),1,1);
-
-
-//        stockManagementDao.addStock(new Product("Boom",12.2d,12, java.time.LocalDate.now()));
-//        ProductTableDesign.printTable(stockManagementDao.fetchStock(6,0),1,1);
+        DbBackupRestoreUtil.getVersion();
 
         StockManagementSystem.run(args);
+
     }
 }
