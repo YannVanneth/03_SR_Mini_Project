@@ -9,6 +9,8 @@ public interface StockManagementDao {
 
     List<Product> fetchStock(int limit, int offset);
 
+    int countTotalRecords();
+
     void addStock(Product product);
 
     void updateStock(Long id, Product product);

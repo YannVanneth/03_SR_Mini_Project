@@ -1,17 +1,18 @@
 package org.sr_g3.utils;
+
 import org.nocrala.tools.texttablefmt.BorderStyle;
 import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
+import org.sr_g3.dao.StockManagementDao;
+import org.sr_g3.dao.StockManagmentDaoImpl;
 import org.sr_g3.model.Product;
 
 import java.util.List;
 
 public class ProductTableDesign {
 
-    public static void printTable(List<Product> products,
-                                  int currentPage,
-                                  int totalPages) {
+    public static void printTable(List<Product> products, int currentPage, int totalPages) {
 
         Table table = new Table(5, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
 
@@ -27,24 +28,24 @@ public class ProductTableDesign {
         CellStyle right = new CellStyle(CellStyle.HorizontalAlign.RIGHT);
 
         // ===== Header =====
-        table.addCell("ID", center);
-        table.addCell("Name", center);
-        table.addCell("Unit Price", center);
-        table.addCell("QTY", center);
-        table.addCell("Import Date", center);
+        table.addCell( Colors.BLUE + "ID", center);
+        table.addCell(Colors.BLUE + "Name", center);
+        table.addCell(Colors.BLUE + "Unit Price", center);
+        table.addCell(Colors.BLUE + "QTY", center);
+        table.addCell(Colors.BLUE + "Import Date" + Colors.WHITE, center);
 
         // ===== Data =====
         for (Product product : products) {
-            table.addCell(String.valueOf(product.getProduct_id()), center);
-            table.addCell(product.getName(), center);
-            table.addCell(String.valueOf(product.getUnit_price()), center);
-            table.addCell(String.valueOf(product.getQuantity()), center);
-            table.addCell(String.valueOf(product.getImported_date()), center);
+            table.addCell(Colors.GREEN + String.valueOf(product.getProduct_id()), center);
+            table.addCell(Colors.YELLOW + product.getName(), center);
+            table.addCell(Colors.PURPLE + String.valueOf(product.getUnit_price()), center);
+            table.addCell(Colors.PINK + String.valueOf(product.getQuantity()), center);
+            table.addCell(Colors.GREEN + String.valueOf(product.getImported_date()) + Colors.WHITE, center);
         }
 
         // ===== Footer=====
-        table.addCell("Page : " + currentPage + " of " + totalPages, center, 2);
-        table.addCell("Total Record : " + products.size(), center, 3);
+        table.addCell("Page : " + Colors.YELLOW +  currentPage +  Colors.WHITE + " of " + Colors.GREEN +  totalPages, center, 2);
+        table.addCell("Total Record : " + Colors.GREEN + products.size(),  center, 3);
 
         System.out.println(table.render());
     }
