@@ -28,7 +28,7 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
             System.out.println();
             Console.print("Stock Management System", "=", 57, Colors.GREEN, Colors.BLUE);
-            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages);
+            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages,totalRecords);
             Console.displayTableMenu();
 
             inputMenuBlock:
@@ -71,7 +71,20 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
                     // Goto
                     case "G" -> {
-                        gotoView();
+                        String np = Console.input("Enter page that you want to go : ", Validator.numberRule());
+
+                        if(Integer.parseInt(np) > totalPages) {
+                            Console.printErrorMessage("Maximum number of pages is " + totalPages);
+                            break inputMenuBlock;
+                        }
+
+                        if(Integer.parseInt(np) < 1) {
+                            Console.printErrorMessage("You are already on the first page.");
+                            break inputMenuBlock;
+                        }
+
+
+                        currentPage = Integer.parseInt(np);
                         break inputMenuBlock;
                     }
 
@@ -131,7 +144,16 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
                     // Set rows
                     case "SE" -> {
-                        setRow(limit);
+                        String strNewRowPerPage;
+                        while (true) {
+                            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
+                            if (strNewRowPerPage == null) {
+                                continue;
+                            }
+                            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
+                            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
+                        }
+                        limit = Integer.parseInt(strNewRowPerPage);
                         break inputMenuBlock;
                     }
 
@@ -172,20 +194,4 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
     }
 
-    public void gotoView(){
-
-    }
-
-    public void setRow(int limit) {
-        String strNewRowPerPage;
-        while (true) {
-            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
-            if (strNewRowPerPage == null) {
-                continue;
-            }
-            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
-            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
-        }
-        limit = Integer.parseInt(strNewRowPerPage);
-    }
 }

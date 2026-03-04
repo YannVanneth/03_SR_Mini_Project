@@ -47,21 +47,7 @@ public class StockManagementDaoImpl implements StockManagementDao {
         return products;
 
     }
-    public long getNextProductId() {
-        try (Connection conn = ConnectionUtil.getDbCon();
-             PreparedStatement ps = conn.prepareStatement(
-                     "SELECT nextval('products_id_seq')")) {   // ← change sequence name if different
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getLong(1);
-            }
-            return -1; // fallback
-        } catch (Exception e) {
-            System.err.println("Error getting next ID: " + e.getMessage());
-            return -1;
-        }
-    }
     @Override
     public int countTotalRecords() {
 
@@ -104,7 +90,7 @@ public class StockManagementDaoImpl implements StockManagementDao {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 long newId = rs.getLong("id");
-                product.setProduct_id(newId);  // ← update the object with real ID
+                product.setProduct_id(newId);
             }
 
             conn.close();
@@ -191,43 +177,72 @@ public class StockManagementDaoImpl implements StockManagementDao {
     }
 
     @Override
+    public long getNextProductId() {
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT nextval('products_id_seq')")) {
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return -1; // fallback
+        } catch (Exception e) {
+            System.err.println("Error getting next ID: " + e.getMessage());
+            return -1;
+        }
+    }
+
+    @Override
     public int totalRow() {
-        return 0;
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT COUNT(*) FROM v_all_products")) {
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (Exception e) {
+            Console.printErrorMessage("Error counting total products: " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public Optional<List<Product>> searchByName(String name) {
+        List<Product> products = new ArrayList<>();
 
-        try{
-            var conn = ConnectionUtil.getDbCon();
-            var ps = conn.prepareStatement("""
-                        SELECT id,name,unit_price,quantity,imported_date\s
-                        FROM v_all_products
-                        WHERE name LIKE ?
-                       \s""");
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement("""
+             SELECT id, name, unit_price, quantity, imported_date 
+             FROM v_all_products 
+             WHERE name ILIKE ?
+             ORDER BY id
+             """)) {
 
-            var rs = ps.executeQuery();
-
-            var products = new ArrayList<Product>();
+            ps.setString(1, "%" + name.trim() + "%");
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Product product = new Product(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getDouble("unit_price"),
-                        rs.getInt("quantity"),
-                        rs.getDate("imported_date").toLocalDate()
-                );
-                //add per object to an arraylist
-                products.add(product);
+                Product p = new Product();
+                p.setProduct_id(rs.getLong("id"));
+                p.setName(rs.getString("name"));
+                p.setUnit_price(rs.getDouble("unit_price"));
+                p.setQuantity(rs.getInt("quantity"));
+                p.setImported_date(rs.getDate("imported_date").toLocalDate());
+                products.add(p);
             }
 
             conn.close();
 
             return Optional.of(products);
 
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            Console.printErrorMessage("Error searching products: " + e.getMessage());
+            return Optional.empty();
         }
     }
 

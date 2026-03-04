@@ -16,12 +16,10 @@ public class DbBackupRestoreUtil {
 
         try {
 
-            //make version start from 1
             if (version < 0){
                 version++;
             }
 
-            // Define paths and PostgreSQL details
             String backupDirPath = dotenv.get("BACKUP_DIR");
             String pgDumpPath = dotenv.get("PGDUMP_PATH");
             //PostgreSQL variables
@@ -30,19 +28,15 @@ public class DbBackupRestoreUtil {
             String database = dotenv.get("DB_NAME");
             String password = dotenv.get("DB_PASSWORD");
 
-            // Generate filename
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String date = dateFormat.format(new Date());
             String backupFile = backupDirPath + "version"+ (version + 1) +"-product-backup-" + date + ".sql";
 
-            // Check for backup folder
             File backupDir = new File(backupDirPath);
             if (!backupDir.exists() && !backupDir.mkdirs()) {
                 throw new IOException("Could not create backup directory: " + backupDirPath);
             }
 
-
-            // Configure ProcessBuilder for pg_dump
             ProcessBuilder pb = new ProcessBuilder(
                     pgDumpPath,
                     "-f", backupFile,
@@ -56,11 +50,8 @@ public class DbBackupRestoreUtil {
             pb.environment().put("PGPASSWORD", password);
             pb.redirectErrorStream(true);
 
-            // Start the process
             Process process = pb.start();
 
-
-            // Wait for process to complete
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new RuntimeException("pg_dump failed with exit code: " + exitCode);
@@ -76,25 +67,19 @@ public class DbBackupRestoreUtil {
 
     public void restorePGSQL(String version) {
         try {
-            // Define paths and PostgreSQL details
+
             String backupDirPath = dotenv.get("BACKUP_DIR")+version;
             String psql = dotenv.get("PSQL_PATH");
-            //PostgreSQL variables
 
             String user =  dotenv.get("DB_USER");
             String database = dotenv.get("DB_NAME");
             String password = dotenv.get("DB_PASSWORD");
 
-
-            // Ensure the backup directory exists
             File backupDir = new File(backupDirPath);
             if (!backupDir.exists() && !backupDir.mkdirs()) {
                 throw new IOException("Could not create backup directory: " + backupDirPath);
             }
 
-
-
-            // Configure ProcessBuilder for pg_dump
             ProcessBuilder pb = new ProcessBuilder(
                     psql,
                     "-U", user,
@@ -104,10 +89,8 @@ public class DbBackupRestoreUtil {
             pb.environment().put("PGPASSWORD", password);
             pb.redirectErrorStream(true);
 
-            // Start the process and capture output
             Process process = pb.start();
 
-            // Wait for process to complete
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new RuntimeException("pg_dump failed with exit code: " + exitCode);
@@ -132,10 +115,7 @@ public class DbBackupRestoreUtil {
 
                 File directory = new File(dotenv.get("BACKUP_DIR"));
 
-                //add to arraylist
                 String[] fileNames = directory.list();
-
-
 
                 if (fileNames == null || fileNames.length == 0) {
                     return -1;
