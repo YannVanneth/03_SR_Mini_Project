@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StockManagmentDaoImpl implements StockManagementDao {
 
@@ -79,12 +80,29 @@ public class StockManagmentDaoImpl implements StockManagementDao {
     }
 
     @Override
-    public void updateStock(Product product) {
+    public void updateStock(Long id, Product product) {
 
     }
 
     @Override
-    public void deleteStock(long id) {
+    public void deleteStockById(long id) {
 
     }
+
+    @Override
+    public Optional<Product> getProductById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public int totalRow() {
+        return 0;
+    }
+
+    @Override
+    public Optional<List<Product>> searchByName(String name) {
+        return Optional.empty();
+    }
+
+
 }
