@@ -1,0 +1,153 @@
+package org.sr_g3.utils;
+
+import org.nocrala.tools.texttablefmt.BorderStyle;
+import org.nocrala.tools.texttablefmt.CellStyle;
+import org.nocrala.tools.texttablefmt.ShownBorders;
+import org.nocrala.tools.texttablefmt.Table;
+import org.sr_g3.model.Product;
+
+import java.util.Collections;
+import java.util.List;
+
+public class ProductTableDesign {
+
+    public static void printTable(List<Product> products, int currentPage, int totalPages, int totalRecords) {
+
+        Table table = new Table(5, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
+
+        table.setColumnWidth(0, 10, 5);   // ID
+        table.setColumnWidth(1, 25, 40);  // Name
+        table.setColumnWidth(2, 15, 20);  // Unit Price
+        table.setColumnWidth(3, 10, 10);  // QTY
+        table.setColumnWidth(4, 15, 20);  // Import Date
+
+        CellStyle center = new CellStyle(CellStyle.HorizontalAlign.CENTER);
+
+        // ===== Header =====
+        table.addCell(Colors.BLUE + "ID", center);
+        table.addCell(Colors.BLUE + "Name", center);
+        table.addCell(Colors.BLUE + "Unit Price", center);
+        table.addCell(Colors.BLUE + "QTY", center);
+        table.addCell(Colors.BLUE + "Import Date" + Colors.WHITE, center);
+
+        // ===== Data =====
+        for (Product product : products) {
+            table.addCell(Colors.GREEN + product.getProduct_id(), center);
+            table.addCell(Colors.YELLOW + product.getName(), center);
+            table.addCell(Colors.PURPLE + product.getUnit_price(), center);
+            table.addCell(Colors.PINK + product.getQuantity(), center);
+            table.addCell(Colors.GREEN + product.getImported_date() + Colors.WHITE, center);
+        }
+
+        // ===== Footer =====
+        table.addCell("Page : " + Colors.YELLOW + currentPage + Colors.WHITE + " of " + Colors.GREEN + totalPages, center, 2);
+        table.addCell("Total Record : " + Colors.GREEN + totalRecords, center, 3);
+
+        System.out.println(table.render());
+    }
+
+    public static void printPendingTable(List<Product> products, String title) {
+
+        Table table = new Table(5, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
+
+        table.setColumnWidth(0, 10, 10);
+        table.setColumnWidth(1, 25, 40);
+        table.setColumnWidth(2, 15, 20);
+        table.setColumnWidth(3, 10, 10);
+        table.setColumnWidth(4, 15, 20);
+
+        CellStyle center = new CellStyle(CellStyle.HorizontalAlign.CENTER);
+
+
+        table.addCell(Colors.BLUE + "ID", center);
+        table.addCell(Colors.BLUE + "Name", center);
+        table.addCell(Colors.BLUE + "Unit Price", center);
+        table.addCell(Colors.BLUE + "QTY", center);
+        table.addCell(Colors.BLUE + "Import Date" + Colors.WHITE, center);
+
+
+        for (Product p : products) {
+            String idStr = (p.getProduct_id() <= 0) ? "Auto" : String.valueOf(p.getProduct_id());
+            table.addCell(Colors.GREEN + idStr, center);
+            table.addCell(Colors.YELLOW + p.getName(), center);
+            table.addCell(Colors.PURPLE + p.getUnit_price(), center);
+            table.addCell(Colors.PINK + p.getQuantity(), center);
+            table.addCell(Colors.GREEN + p.getImported_date() + Colors.WHITE, center);
+        }
+
+        System.out.println(Colors.YELLOW + title + Colors.WHITE);
+        System.out.println(table.render());
+    }
+
+    public static void printSingleProduct(Product product) {
+        if (product == null) {
+            Console.printErrorMessage("No product to display.");
+            return;
+        }
+
+        List<Product> list = Collections.singletonList(product);
+
+        Table table = new Table(5, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
+
+        // Same column widths and styles as printTable
+        table.setColumnWidth(0, 10, 5);
+        table.setColumnWidth(1, 25, 40);
+        table.setColumnWidth(2, 15, 20);
+        table.setColumnWidth(3, 10, 10);
+        table.setColumnWidth(4, 15, 20);
+
+        CellStyle center = new CellStyle(CellStyle.HorizontalAlign.CENTER);
+
+        // Header
+        table.addCell(Colors.BLUE + "ID", center);
+        table.addCell(Colors.BLUE + "Name", center);
+        table.addCell(Colors.BLUE + "Unit Price", center);
+        table.addCell(Colors.BLUE + "QTY", center);
+        table.addCell(Colors.BLUE + "Import Date" + Colors.WHITE, center);
+
+        // Data row
+        table.addCell(Colors.GREEN + product.getProduct_id(), center);
+        table.addCell(Colors.YELLOW + product.getName(), center);
+        table.addCell(Colors.PURPLE + product.getUnit_price(), center);
+        table.addCell(Colors.PINK + product.getQuantity(), center);
+        table.addCell(Colors.GREEN + product.getImported_date() + Colors.WHITE, center);
+
+        System.out.println(table.render());
+    }
+    public static void printSearchResults(List<Product> products, String searchTerm) {
+        if (products == null || products.isEmpty()) {
+            Console.printErrorMessage("No products found matching '" + searchTerm + "'");
+            return;
+        }
+
+        Table table = new Table(5, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
+
+        table.setColumnWidth(0, 10, 5);   // ID
+        table.setColumnWidth(1, 25, 40);  // Name
+        table.setColumnWidth(2, 15, 20);  // Unit Price
+        table.setColumnWidth(3, 10, 10);  // QTY
+        table.setColumnWidth(4, 15, 20);  // Import Date
+
+        CellStyle center = new CellStyle(CellStyle.HorizontalAlign.CENTER);
+
+        // Header
+        table.addCell(Colors.BLUE + "ID", center);
+        table.addCell(Colors.BLUE + "Name", center);
+        table.addCell(Colors.BLUE + "Unit Price", center);
+        table.addCell(Colors.BLUE + "QTY", center);
+        table.addCell(Colors.BLUE + "Import Date" + Colors.WHITE, center);
+
+        // Data rows
+        for (Product product : products) {
+            table.addCell(Colors.GREEN + product.getProduct_id(), center);
+            table.addCell(Colors.YELLOW + product.getName(), center);
+            table.addCell(Colors.PURPLE + product.getUnit_price(), center);
+            table.addCell(Colors.PINK + product.getQuantity(), center);
+            table.addCell(Colors.GREEN + product.getImported_date() + Colors.WHITE, center);
+        }
+
+
+
+        System.out.println(table.render());
+    }
+}
