@@ -1,7 +1,11 @@
 package org.sr_g3.view.impl;
 
+import org.sr_g3.controller.StockController;
 import org.sr_g3.dao.StockManagementDao;
+import org.sr_g3.dao.StockManagementDaoImpl;
 import org.sr_g3.model.Product;
+import org.sr_g3.model.ProductManager;
+import org.sr_g3.service.ProductController;
 import org.sr_g3.utils.Colors;
 import org.sr_g3.utils.Console;
 import org.sr_g3.utils.ProductTableDesign;
@@ -9,11 +13,13 @@ import org.sr_g3.utils.Validator;
 import org.sr_g3.utils.*;
 import org.sr_g3.view.ProductView;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 public class ProgramUi implements ProductView {
 
-    private final DbBackupRestoreUtil dbBackupRestoreUtil = new  DbBackupRestoreUtil();
+//    private final DbBackupRestoreUtil dbBackupRestoreUtil = new  DbBackupRestoreUtil();
+//    private final StockController productController = new StockController();
 
     public void run(StockManagementDao stockManagementDao) {
 
@@ -71,7 +77,7 @@ public class ProgramUi implements ProductView {
 
                     // Goto
                     case "G" -> {
-                        System.out.println("goto-page");
+                        gotoView();
                         break inputMenuBlock;
                     }
 
@@ -83,51 +89,52 @@ public class ProgramUi implements ProductView {
 
                     // Read (id)
                     case "R" -> {
-                        System.out.println("read-by-id");
+                        read();
                         break inputMenuBlock;
                     }
 
                     // Update
                     case "U" -> {
-                        System.out.println("update");
+                        updateProduct();
                         break inputMenuBlock;
                     }
 
                     // Delete
                     case "D" -> {
-                        System.out.println("delete");
+                        deleteProduct();
                         break inputMenuBlock;
                     }
 
                     // Search (name)
                     case "S" -> {
-                        System.out.println("search-by-name");
+                        searchByName();
                         break inputMenuBlock;
                     }
 
                     // Save
                     case "SA" -> {
-                        System.out.println("save");
+//                        system.save();
+                        save();
                         break inputMenuBlock;
                     }
 
                     // Unsaved
                     case "UN" -> {
-                        System.out.println("unsaved");
+//                        system.unSaved();
+                        unSave();
                         break inputMenuBlock;
                     }
 
                     // Backup
                     case "BA" -> {
-                        dbBackupRestoreUtil.backupPGSQL(dbBackupRestoreUtil.getVersion());
-
+//                        dbBackupRestoreUtil.backupPGSQL(dbBackupRestoreUtil.getVersion());
                         System.out.println("backup");
                         break inputMenuBlock;
                     }
 
                     // Restore
                     case "RE" -> {
-                        dbBackupRestoreUtil.showBackupMenu();
+//                        dbBackupRestoreUtil.showBackupMenu();
                         System.out.println("restore");
                         break inputMenuBlock;
                     }
@@ -162,23 +169,102 @@ public class ProgramUi implements ProductView {
 
     public Product write(){
 
-        Product model = new Product();
+        System.out.println();
+        StockManagementDao dao = new StockManagementDaoImpl();
+        long nextId = dao.getNextProductId();
 
-        Console.print("Write Product", "=", 50);
-        String name = Console.input("Please enter name  : ", Validator.stringRule());
-        String price = Console.input("Please enter price : ", Validator.floatRule());
-        String qty = Console.input("Please enter quantity : ", Validator.numberRule());
-        Console.print(Colors.YELLOW + "Enter to be continue....." + Colors.WHITE);
+        if (nextId <= 0) {
+            Console.printErrorMessage("Could not determine next product ID.");
+            return null;
+        }
 
-        model.setName(name);
-        model.setQuantity(Integer.parseInt(qty));
-        model.setUnit_price(Double.parseDouble(price));
+        System.out.println("ID: " + nextId);
 
-        return model;
+        try {
+            String name = Console.input(
+                    "Input Product Name : ",
+                    "[A-Za-z0-9\\s\\-\\.\\,]{3,100}",
+                    "Invalid name! (3-100 chars, letters/numbers/space/-.,)"
+            ).trim();
+
+
+            String priceStr = Console.input(
+                    "Enter price: ",
+                    Validator.floatRule(),
+                    "Invalid price! Enter positive number"
+            );
+            double price = Double.parseDouble(priceStr);
+            if (price <= 0) {
+                Console.printErrorMessage("Price must be > 0");
+                return null;
+            }
+
+
+            String qtyStr = Console.input(
+                    "Enter quantity: ",
+                    Validator.numberRule(),
+                    "Invalid quantity! Enter non-negative integer"
+            );
+            int quantity = Integer.parseInt(qtyStr);
+            if (quantity < 0) {
+                Console.printErrorMessage("Quantity cannot be negative");
+                return null;
+            }
+
+            Product newProduct = new Product();
+            newProduct.setProduct_id(nextId);
+            newProduct.setName(name);
+            newProduct.setUnit_price(price);
+            newProduct.setQuantity(quantity);
+            newProduct.setImported_date(LocalDate.now());
+
+            return newProduct;
+
+
+
+        } catch (Exception e) {
+            Console.printErrorMessage("Error: " + e.getMessage());
+        }
+
+        System.out.println("Enter to continue.....");
+        new Scanner(System.in).nextLine();
+
+        return null;
     }
 
     @Override
     public Optional<Product> read() {
+        System.out.println();
+
+        String idStr = Console.input(
+                "Please input id to get record : ",
+                Validator.numberRule(),
+                "Please enter a valid positive number"
+        );
+
+        long id;
+        try {
+            id = Long.parseLong(idStr);
+            if (id <= 0) {
+                Console.printErrorMessage("ID must be a positive number.");
+                return Optional.empty();
+            }
+        } catch (NumberFormatException e) {
+            Console.printErrorMessage("Invalid ID format.");
+            return Optional.empty();
+        }
+
+        StockManagementDao dao = new StockManagementDaoImpl();
+        Optional<Product> optionalProduct = dao.getProductById(id);
+
+        if (optionalProduct.isPresent()) {
+            ProductTableDesign.printSingleProduct(optionalProduct.get());
+        } else {
+            Console.printErrorMessage("No product found with ID: " + id);
+        }
+
+        System.out.println("\nEnter to continue...");
+        new Scanner(System.in).nextLine();
         return Optional.empty();
     }
 
@@ -219,11 +305,69 @@ public class ProgramUi implements ProductView {
 
     @Override
     public void unSave() {
+        while (true) {
+            Console.print("Unsaved Changes", "-", 60, Colors.YELLOW, Colors.PINK);
 
+            System.out.println("'ui' for viewing insert products and 'uu' for viewing update products or 'b' for back to menu");
+
+            String option = Console.input("Enter your option : ",
+                    "[uU][iI]|[uU][uU]|[bB]",
+                    "Invalid! Please use ui, uu or b only.");
+
+            if (option == null) continue;
+
+            switch (option.trim().toLowerCase()) {
+                case "ui" -> showPendingInserts();
+                case "uu" -> showPendingUpdates();
+                case "b" -> {
+                    return;
+                }
+                default -> Console.printErrorMessage("Invalid option!");
+            }
+        }
     }
 
     @Override
     public void save() {
 
     }
+
+    private void showPendingInserts() {
+        List<Product> list = ProductManager.getProductList();
+
+        if (list.isEmpty()) {
+            Console.printSystemMessage("No pending INSERT products yet.");
+            System.out.print("Enter to continue...");
+            new Scanner(System.in).nextLine();
+            return;
+        }
+
+        ProductTableDesign.printPendingTable(list, "PENDING INSERT PRODUCTS");
+        System.out.print("Enter to continue...");
+        new Scanner(System.in).nextLine();
+    }
+
+    private void showPendingUpdates() {
+        Map<Long, Product> map = ProductManager.getUpdatedProductList();
+
+        if (map.isEmpty()) {
+            Console.printSystemMessage("No pending UPDATE products yet.");
+            System.out.print("Enter to continue...");
+            new Scanner(System.in).nextLine();
+            return;
+        }
+
+        List<Product> list = new ArrayList<>();
+        for (var entry : map.entrySet()) {
+            Product p = entry.getValue();
+            p.setProduct_id(entry.getKey());
+            list.add(p);
+        }
+
+        ProductTableDesign.printPendingTable(list, "PENDING UPDATE PRODUCTS");
+        System.out.print("Enter to continue...");
+        new Scanner(System.in).nextLine();
+    }
+
+
 }

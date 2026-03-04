@@ -8,6 +8,8 @@ import org.sr_g3.utils.Console;
 import org.sr_g3.utils.ProductTableDesign;
 import org.sr_g3.utils.Validator;
 
+import java.util.*;
+
 public class StockManagementSystem implements StockManagementFunctionality {
 
     private final StockController stockController = new StockController();
@@ -105,13 +107,13 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
                     // Save
                     case "SA" -> {
-                        save();
+                        stockController.save();
                         break inputMenuBlock;
                     }
 
                     // Unsaved
                     case "UN" -> {
-                        unSaved();
+                        stockController.unSaved();
                         break inputMenuBlock;
                     }
 

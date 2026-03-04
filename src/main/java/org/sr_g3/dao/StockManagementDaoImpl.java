@@ -2,6 +2,7 @@ package org.sr_g3.dao;
 
 import org.sr_g3.model.Product;
 import org.sr_g3.utils.ConnectionUtil;
+import org.sr_g3.utils.Console;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,7 +47,21 @@ public class StockManagementDaoImpl implements StockManagementDao {
         return products;
 
     }
+    public long getNextProductId() {
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT nextval('products_id_seq')")) {   // ← change sequence name if different
 
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return -1; // fallback
+        } catch (Exception e) {
+            System.err.println("Error getting next ID: " + e.getMessage());
+            return -1;
+        }
+    }
     @Override
     public int countTotalRecords() {
 
@@ -73,24 +88,28 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
     @Override
     public void addStock(Product product) {
-        try{
+        try {
             var conn = ConnectionUtil.getDbCon();
             var ps = conn.prepareStatement("""
-                        INSERT INTO v_all_products (id,name,unit_price,quantity,imported_date)
-                        VALUES (?,?,?,?,?)
-                        """);
+            INSERT INTO products (name, unit_price, quantity, imported_date)
+            VALUES (?, ?, ?, ?)
+            RETURNING id
+            """);
 
-            ps.setLong(1,product.getProduct_id());
-            ps.setString(2, product.getName());
-            ps.setDouble(3, product.getUnit_price());
-            ps.setInt(4, product.getQuantity());
-            ps.setDate(5, Date.valueOf(product.getImported_date()));
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getUnit_price());
+            ps.setInt(3, product.getQuantity());
+            ps.setDate(4, Date.valueOf(product.getImported_date()));
 
-            ps.execute();
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                long newId = rs.getLong("id");
+                product.setProduct_id(newId);  // ← update the object with real ID
+            }
 
             conn.close();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to add product: " + e.getMessage(), e);
         }
     }
 
@@ -142,31 +161,32 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
     @Override
     public Optional<Product> getProductById(Long id) {
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement("""
+             SELECT id, name, unit_price, quantity, imported_date 
+             FROM v_all_products 
+             WHERE id = ?
+             """)) {
 
-        try{
-            var conn = ConnectionUtil.getDbCon();
-            var ps = conn.prepareStatement("""
-                        SELECT  id,name,unit_price,quantity,imported_date 
-                        FROM v_all_products 
-                        WHERE id = ?
-                        """);
             ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
 
-            var rs = ps.executeQuery();
+            if (rs.next()) {
+                Product product = new Product();
+                product.setProduct_id(rs.getLong("id"));
+                product.setName(rs.getString("name"));
+                product.setUnit_price(rs.getDouble("unit_price"));
+                product.setQuantity(rs.getInt("quantity"));
+                product.setImported_date(rs.getDate("imported_date").toLocalDate());
 
-            Product product = new Product(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getDouble("unit_price"),
-                    rs.getInt("quantity"),
-                    rs.getDate("imported_date").toLocalDate()
-            );
-            conn.close();
-
-            return Optional.of(product);
+                return Optional.of(product);
+            } else {
+                return Optional.empty();  // ID not found
+            }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Console.printErrorMessage("Error fetching product ID " + id + ": " + e.getMessage());
+            return Optional.empty();
         }
     }
 

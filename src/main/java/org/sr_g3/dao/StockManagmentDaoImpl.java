@@ -95,6 +95,11 @@ public class StockManagmentDaoImpl implements StockManagementDao {
     }
 
     @Override
+    public long getNextProductId() {
+        return 0;
+    }
+
+    @Override
     public int totalRow() {
         return 0;
     }

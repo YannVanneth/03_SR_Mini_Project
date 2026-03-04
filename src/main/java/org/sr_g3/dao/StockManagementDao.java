@@ -18,6 +18,7 @@ public interface StockManagementDao {
     void deleteStockById(long id);
 
     Optional<Product> getProductById(Long id);
+    long getNextProductId();
 
     int totalRow();
 

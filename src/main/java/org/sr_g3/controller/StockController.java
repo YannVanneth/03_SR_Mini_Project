@@ -5,10 +5,11 @@ import org.sr_g3.dao.StockManagementDaoImpl;
 import org.sr_g3.service.ProductController;
 import org.sr_g3.service.ProductService;
 import org.sr_g3.service.impl.ProductServiceImpl;
+import org.sr_g3.view.ProductView;
 import org.sr_g3.view.impl.ProgramUi;
 
 public class StockController implements ProductController {
-    private final ProgramUi programUi = new ProgramUi();
+    private final ProductView programUi = new ProgramUi();
     private final StockManagementDao stockManagementDao = new StockManagementDaoImpl();
     private final ProductService productService = new ProductServiceImpl(stockManagementDao);
 
@@ -22,12 +23,12 @@ public class StockController implements ProductController {
 
     @Override
     public void update() {
-
+        programUi.updateProduct();
     }
 
     @Override
     public void delete() {
-
+        programUi.deleteProduct();
     }
 
     @Override
@@ -36,16 +37,18 @@ public class StockController implements ProductController {
     }
 
     @Override
-    public void read(){ }
+    public void read(){
+        programUi.read();
+    }
 
     @Override
     public void save() {
-
+        programUi.save();
     }
 
     @Override
     public void unSaved() {
-
+        programUi.unSave();
     }
 
     @Override
