@@ -22,13 +22,6 @@ public class Product {
         this.imported_date = imported_date;
     }
 
-    public Product( String name, double unit_price, int quantity, LocalDate imported_date) {
-        this.name = name;
-        this.unit_price = unit_price;
-        this.quantity = quantity;
-        this.imported_date = imported_date;
-    }
-
     public long getProduct_id() {
         return product_id;
     }
@@ -69,6 +62,14 @@ public class Product {
         this.imported_date = imported_date;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "product_id=" + product_id +
+                ", name='" + name + '\'' +
+                ", unit_price=" + unit_price +
+                ", quantity=" + quantity +
+                ", imported_date=" + imported_date +
+                '}';
+    }
 }

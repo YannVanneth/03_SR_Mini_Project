@@ -7,5 +7,5 @@ public interface Colors {
     String WHITE = "\u001B[0m";
     String PURPLE = "\u001B[35m";
     String YELLOW = "\u001B[33m";
-    String  PINK = "\u001B[35m";
+    String PINK = "\u001B[38;5;205m";
 }

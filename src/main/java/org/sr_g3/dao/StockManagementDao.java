@@ -9,13 +9,17 @@ public interface StockManagementDao {
 
     List<Product> fetchStock(int limit, int offset);
 
+    int countTotalRecords();
+
     void addStock(Product product);
 
     void updateStock(Long id, Product product);
 
-    void deleteStock(long id);
+    void deleteStockById(long id);
 
     Optional<Product> getProductById(Long id);
+
+    int totalRow();
 
     Optional<List<Product>> searchByName(String name);
 }

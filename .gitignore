@@ -39,5 +39,5 @@ build/
 .DS_Store
 
 ### Environment variables file ###
-.env
+.env-example
 .idea/copilot.data.migration.ask2agent.xml

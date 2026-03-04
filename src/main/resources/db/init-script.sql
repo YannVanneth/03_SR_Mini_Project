@@ -1,4 +1,4 @@
-CREATE DATABASE StockManagementDB;
+CREATE if not exists DATABASE StockManagementDB;
 
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,

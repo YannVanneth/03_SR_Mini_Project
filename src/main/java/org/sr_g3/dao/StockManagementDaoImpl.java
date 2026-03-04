@@ -38,13 +38,18 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
             conn.close();
 
-        }catch (SQLException | ClassNotFoundException e){
+        }catch (Exception e){
             throw new RuntimeException("Error getting stock", e);
         }
 
         //return as an arraylist
         return products;
 
+    }
+
+    @Override
+    public int countTotalRecords() {
+        return 0;
     }
 
     @Override
@@ -99,22 +104,27 @@ public class StockManagementDaoImpl implements StockManagementDao {
     }
 
     @Override
-    public void deleteStock(long id) {
-        try{
-            var conn = ConnectionUtil.getDbCon();
-            var ps = conn.prepareStatement("""
-                       DELETE FROM v_all_products
-                       WHERE id = ?;
-                       """);
+    public void deleteStockById(long id) {
 
-            ps.setLong(1, id);
-            ps.execute();
-
-            conn.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
+
+//    @Override
+//    public void deleteStock(long id) {
+//        try{
+//            var conn = ConnectionUtil.getDbCon();
+//            var ps = conn.prepareStatement("""
+//                       DELETE FROM v_all_products
+//                       WHERE id = ?;
+//                       """);
+//
+//            ps.setLong(1, id);
+//            ps.execute();
+//
+//            conn.close();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     @Override
     public Optional<Product> getProductById(Long id) {
@@ -144,6 +154,11 @@ public class StockManagementDaoImpl implements StockManagementDao {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int totalRow() {
+        return 0;
     }
 
     @Override

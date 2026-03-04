@@ -1,10 +1,11 @@
 package org.sr_g3.config.app;
 
 import org.sr_g3.service.StockManagementFunctionality;
+import org.sr_g3.view.ProgramUi;
 
-public class StockManagementSystem implements StockManagementFunctionality  {
-    public static void run(String[] args) throws Exception{
-
+public class StockManagementSystem implements StockManagementFunctionality {
+    public static void run(String[] args) throws Exception {
+        ProgramUi.run();
     }
 
     @Override
@@ -34,6 +35,5 @@ public class StockManagementSystem implements StockManagementFunctionality  {
 
     @Override
     public void setRow() {
-
     }
 }
