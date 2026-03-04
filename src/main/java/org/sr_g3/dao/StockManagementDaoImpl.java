@@ -64,7 +64,20 @@ public class StockManagementDaoImpl implements StockManagementDao {
     }
     @Override
     public int countTotalRecords() {
-        return 0;
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT COUNT(*) FROM v_all_products")) {  // ← use your real table/view name
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);  // returns the real count, e.g. 10, 15, 20...
+            }
+            return 0;
+        } catch (Exception e) {
+            Console.printErrorMessage("Error counting total products: " + e.getMessage());
+            e.printStackTrace();  // for debugging — remove later if you want
+            return 0;
+        }
     }
 
     @Override
@@ -183,39 +196,35 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
     @Override
     public Optional<List<Product>> searchByName(String name) {
+        List<Product> products = new ArrayList<>();
 
-        try{
-            var conn = ConnectionUtil.getDbCon();
-            var ps = conn.prepareStatement("""
-                        SELECT id,name,unit_price,quantity,imported_date 
-                        FROM v_all_products
-                        WHERE name LIKE ?
-                        """);
+        try (Connection conn = ConnectionUtil.getDbCon();
+             PreparedStatement ps = conn.prepareStatement("""
+             SELECT id, name, unit_price, quantity, imported_date 
+             FROM v_all_products 
+             WHERE name ILIKE ?
+             ORDER BY id
+             """)) {
 
-            var rs = ps.executeQuery();
-
-            var products = new ArrayList<Product>();
+            ps.setString(1, "%" + name.trim() + "%");
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Product product = new Product(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getDouble("unit_price"),
-                        rs.getInt("quantity"),
-                        rs.getDate("imported_date").toLocalDate()
-                );
-                //add per object to an arraylist
-                products.add(product);
+                Product p = new Product();
+                p.setProduct_id(rs.getLong("id"));
+                p.setName(rs.getString("name"));
+                p.setUnit_price(rs.getDouble("unit_price"));
+                p.setQuantity(rs.getInt("quantity"));
+                p.setImported_date(rs.getDate("imported_date").toLocalDate());
+                products.add(p);
             }
-
-            conn.close();
 
             return Optional.of(products);
 
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            Console.printErrorMessage("Error searching products: " + e.getMessage());
+            return Optional.empty();
         }
     }
-
 
 }
