@@ -6,11 +6,14 @@ import org.sr_g3.utils.Colors;
 import org.sr_g3.utils.Console;
 import org.sr_g3.utils.ProductTableDesign;
 import org.sr_g3.utils.Validator;
+import org.sr_g3.utils.*;
 import org.sr_g3.view.ProductView;
 
 import java.util.Optional;
 
 public class ProgramUi implements ProductView {
+
+    private final DbBackupRestoreUtil dbBackupRestoreUtil = new  DbBackupRestoreUtil();
 
     public void run(StockManagementDao stockManagementDao) {
 
@@ -68,6 +71,7 @@ public class ProgramUi implements ProductView {
 
                     // Goto
                     case "G" -> {
+                        System.out.println("goto-page");
                         break inputMenuBlock;
                     }
 
@@ -115,12 +119,15 @@ public class ProgramUi implements ProductView {
 
                     // Backup
                     case "BA" -> {
+                        dbBackupRestoreUtil.backupPGSQL(dbBackupRestoreUtil.getVersion());
+
                         System.out.println("backup");
                         break inputMenuBlock;
                     }
 
                     // Restore
                     case "RE" -> {
+                        dbBackupRestoreUtil.showBackupMenu();
                         System.out.println("restore");
                         break inputMenuBlock;
                     }
