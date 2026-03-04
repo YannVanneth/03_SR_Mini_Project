@@ -121,7 +121,7 @@ public class DbBackupRestoreUtil {
     }
 
 
-    public int getVersion() {
+    public static int getVersion() {
         try{
 
             String backupDirPath = dotenv.get("BACKUP_DIR");
