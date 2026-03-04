@@ -7,4 +7,12 @@ public interface StockManagementFunctionality {
     void restore();
     void exit();
     void setRow();
+
+    void write();
+
+    void readById();
+
+    void searchByName();
+
+    void updateProduct();
 }
