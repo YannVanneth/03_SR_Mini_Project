@@ -11,7 +11,7 @@ public class ConnectionUtil {
 
 
     public static Connection getDbCon() throws SQLException, ClassNotFoundException {
-//
+
         Dotenv dotenv = Dotenv.load();
         //set up db connection
         String hostname = dotenv.get("DB_HOST");

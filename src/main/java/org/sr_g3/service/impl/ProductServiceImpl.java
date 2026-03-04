@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductManager productManager = new ProductManager();
     private final StockManagementDao stockManagementDao;
 
     public ProductServiceImpl(StockManagementDao stockManagementDao) {
@@ -21,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void create(Product product) {
         this.stockManagementDao.addStock(product);
-        this.productManager.addProduct(product);
+        ProductManager.addProduct(product);
     }
 
     @Override

@@ -18,8 +18,7 @@ import java.util.*;
 
 public class ProgramUi implements ProductView {
 
-//    private final DbBackupRestoreUtil dbBackupRestoreUtil = new  DbBackupRestoreUtil();
-//    private final StockController productController = new StockController();
+    private final DbBackupRestoreUtil dbBackupRestoreUtil = new  DbBackupRestoreUtil();
 
     public void run(StockManagementDao stockManagementDao) {
 
@@ -127,14 +126,14 @@ public class ProgramUi implements ProductView {
 
                     // Backup
                     case "BA" -> {
-//                        dbBackupRestoreUtil.backupPGSQL(dbBackupRestoreUtil.getVersion());
+                        dbBackupRestoreUtil.backupPGSQL(dbBackupRestoreUtil.getVersion());
                         System.out.println("backup");
                         break inputMenuBlock;
                     }
 
                     // Restore
                     case "RE" -> {
-//                        dbBackupRestoreUtil.showBackupMenu();
+                        dbBackupRestoreUtil.showBackupMenu();
                         System.out.println("restore");
                         break inputMenuBlock;
                     }
@@ -329,7 +328,56 @@ public class ProgramUi implements ProductView {
 
     @Override
     public void save() {
+        if (ProductManager.getProductList().isEmpty() && ProductManager.getUpdatedProductList().isEmpty()) {
+            Console.printSystemMessage("No pending changes to save.");
+            return;
+        }
 
+        Console.print("Saving pending changes...", "-", 60, Colors.YELLOW, Colors.GREEN);
+
+        boolean success = true;
+        int insertedCount = 0;
+        int updatedCount = 0;
+
+        StockManagementDao dao = new StockManagementDaoImpl();
+
+
+        for (Product product : ProductManager.getProductList()) {
+            try {
+                dao.addStock(product);
+                insertedCount++;
+            } catch (Exception e) {
+                Console.printErrorMessage("Failed to insert product: " + product.getName() + " → " + e.getMessage());
+                success = false;
+            }
+        }
+
+
+        for (Map.Entry<Long, Product> entry : ProductManager.getUpdatedProductList().entrySet()) {
+            Long id = entry.getKey();
+            Product updated = entry.getValue();
+
+            try {
+                dao.updateStock(id, updated);
+                updatedCount++;
+            } catch (Exception e) {
+                Console.printErrorMessage("Failed to update product ID " + id + " → " + e.getMessage());
+                success = false;
+            }
+        }
+
+
+        if (success) {
+            Console.printSuccessMessage("SAVE SUCCESSFUL!");
+            Console.printSystemMessage("Inserted: " + insertedCount + " | Updated: " + updatedCount);
+            ProductManager.clearProductList();
+        } else {
+            Console.printErrorMessage("Some changes could not be saved. Please check messages above.");
+
+        }
+
+        System.out.println("Press Enter to continue...");
+        new java.util.Scanner(System.in).nextLine();
     }
 
     private void showPendingInserts() {
