@@ -48,4 +48,25 @@ public class ProductServiceImpl implements ProductService {
     public Optional<List<Product>> getProductByName(String name) {
         return this.stockManagementDao.searchByName(name);
     }
+
+    @Override
+    public void save() {
+
+    }
+
+    @Override
+    public void unSaved() {
+
+    }
+
+    @Override
+    public void backup() {
+
+    }
+
+    @Override
+    public void restore() {
+
+    }
+
 }

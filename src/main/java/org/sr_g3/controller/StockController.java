@@ -37,4 +37,24 @@ public class StockController implements ProductController {
 
     @Override
     public void read(){ }
+
+    @Override
+    public void save() {
+
+    }
+
+    @Override
+    public void unSaved() {
+
+    }
+
+    @Override
+    public void backup() {
+
+    }
+
+    @Override
+    public void restore() {
+
+    }
 }

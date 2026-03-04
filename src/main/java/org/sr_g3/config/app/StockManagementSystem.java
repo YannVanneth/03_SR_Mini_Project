@@ -69,6 +69,7 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
                     // Goto
                     case "G" -> {
+                        gotoView();
                         break inputMenuBlock;
                     }
 
@@ -80,70 +81,61 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
                     // Read (id)
                     case "R" -> {
-                        System.out.println("read-by-id");
+                        stockController.read();
                         break inputMenuBlock;
                     }
 
                     // Update
                     case "U" -> {
-                        System.out.println("update");
+                        stockController.update();
                         break inputMenuBlock;
                     }
 
                     // Delete
                     case "D" -> {
-                        System.out.println("delete");
+                        stockController.delete();
                         break inputMenuBlock;
                     }
 
                     // Search (name)
                     case "S" -> {
-                        System.out.println("search-by-name");
+                        stockController.searchByName();
                         break inputMenuBlock;
                     }
 
                     // Save
                     case "SA" -> {
-                        System.out.println("save");
+                        save();
                         break inputMenuBlock;
                     }
 
                     // Unsaved
                     case "UN" -> {
-                        System.out.println("unsaved");
+                        unSaved();
                         break inputMenuBlock;
                     }
 
                     // Backup
                     case "BA" -> {
-                        System.out.println("backup");
+                        backup();
                         break inputMenuBlock;
                     }
 
                     // Restore
                     case "RE" -> {
-                        System.out.println("restore");
+                        restore();
                         break inputMenuBlock;
                     }
 
                     // Set rows
                     case "SE" -> {
-                        String strNewRowPerPage;
-                        while (true) {
-                            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
-                            if (strNewRowPerPage == null) {
-                                continue;
-                            }
-                            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
-                            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
-                        }
-                        limit = Integer.parseInt(strNewRowPerPage);
+                        setRow(limit);
                         break inputMenuBlock;
                     }
 
                     // Exit
                     case "E" -> {
-                        Console.printSystemMessage("Exiting Application...");
+                        exit();
                         break program;
                     }
 
@@ -174,13 +166,24 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
     }
 
-    @Override
     public void exit() {
 
     }
 
-    @Override
-    public void setRow() {
+    public void gotoView(){
 
+    }
+
+    public void setRow(int limit) {
+        String strNewRowPerPage;
+        while (true) {
+            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
+            if (strNewRowPerPage == null) {
+                continue;
+            }
+            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
+            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
+        }
+        limit = Integer.parseInt(strNewRowPerPage);
     }
 }

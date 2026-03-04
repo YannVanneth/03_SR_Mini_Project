@@ -5,7 +5,7 @@ import org.sr_g3.model.Product;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductService{
+public interface ProductService extends StockManagementFunctionality{
 
     // crud service
     void create(Product product);
