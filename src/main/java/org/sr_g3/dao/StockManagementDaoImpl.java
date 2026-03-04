@@ -143,27 +143,31 @@ public class StockManagementDaoImpl implements StockManagementDao {
     @Override
     public Optional<Product> getProductById(Long id) {
 
-        try{
+        try {
             var conn = ConnectionUtil.getDbCon();
             var ps = conn.prepareStatement("""
-                        SELECT  id,name,unit_price,quantity,imported_date 
-                        FROM v_all_products 
-                        WHERE id = ?
-                        """);
-            ps.setLong(1, id);
+                SELECT id, name, unit_price, quantity, imported_date
+                FROM v_all_products
+                WHERE id = ?
+                """);
 
+            ps.setLong(1, id);
             var rs = ps.executeQuery();
 
-            Product product = new Product(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getDouble("unit_price"),
-                    rs.getInt("quantity"),
-                    rs.getDate("imported_date").toLocalDate()
-            );
-            conn.close();
+            if (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getDouble("unit_price"),
+                        rs.getInt("quantity"),
+                        rs.getDate("imported_date").toLocalDate()
+                );
+                conn.close();
+                return Optional.of(product);
+            }
 
-            return Optional.of(product);
+            conn.close();
+            return Optional.empty();
 
         } catch (Exception e) {
             throw new RuntimeException(e);

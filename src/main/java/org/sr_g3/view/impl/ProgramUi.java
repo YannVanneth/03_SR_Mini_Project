@@ -9,7 +9,10 @@ import org.sr_g3.utils.Validator;
 import org.sr_g3.utils.*;
 import org.sr_g3.view.ProductView;
 
+import java.awt.*;
+import java.lang.invoke.StringConcatFactory;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class ProgramUi implements ProductView {
 
@@ -28,7 +31,7 @@ public class ProgramUi implements ProductView {
 
             System.out.println();
             Console.print("Stock Management System", "=", 57, Colors.GREEN, Colors.BLUE);
-            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages);
+            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages, totalRecords);
             Console.displayTableMenu();
 
             inputMenuBlock:
@@ -95,7 +98,7 @@ public class ProgramUi implements ProductView {
 
                     // Delete
                     case "D" -> {
-                        System.out.println("delete");
+                        deleteProduct(stockManagementDao);
                         break inputMenuBlock;
                     }
 
@@ -128,22 +131,12 @@ public class ProgramUi implements ProductView {
                     // Restore
                     case "RE" -> {
                         dbBackupRestoreUtil.showBackupMenu();
-                        System.out.println("restore");
                         break inputMenuBlock;
                     }
 
                     // Set rows
                     case "SE" -> {
-                        String strNewRowPerPage;
-                        while (true) {
-                            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
-                            if (strNewRowPerPage == null) {
-                                continue;
-                            }
-                            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
-                            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
-                        }
-                        limit = Integer.parseInt(strNewRowPerPage);
+                        limit = setRow();
                         break inputMenuBlock;
                     }
 
@@ -198,8 +191,49 @@ public class ProgramUi implements ProductView {
     }
 
     @Override
-    public boolean deleteProduct() {
-        return false;
+    public void deleteProduct(StockManagementDao stockManagementDao) {
+        String id;
+        Optional<Product> product;
+
+        out:
+        while (true) {
+            id = Console.input(Colors.YELLOW + "Please input id to delete : " + Colors.WHITE, Validator.numberRule(), "Invalid input! Please enter only number");
+            if (id == null) {
+                continue;
+            }
+
+            if (Integer.parseInt(id) <= 0) {
+                Console.printErrorMessage("ID must be greater than 0.");
+            } else {
+                long productId = Long.parseLong(id);
+                System.out.println(productId);
+                product = stockManagementDao.getProductById(productId);
+                System.out.println(product);
+                if (product.isPresent()) {
+                    ProductTableDesign.printSingleProduct(product.get());
+                    while (true) {
+                        String commitDelete = Console.input("Are you sure you want to delete product id : ", Validator.CharacterRule(), "Please enter text only.");
+                        if (commitDelete == null) continue;
+                        if (commitDelete.equalsIgnoreCase("y")) {
+                            stockManagementDao.deleteStockById(productId);
+                            Console.printSuccessMessage("Delete Successfully!");
+                            Console.waitEnter();
+                            break out;
+                        }
+                        else if (commitDelete.equalsIgnoreCase("n")) {
+                            Console.printSystemMessage("Cancel Deleting...");
+                            Console.waitEnter();
+                            break out;
+                        }
+                        else {
+                            Console.printErrorMessage("Please enter only y/n.");
+                        }
+                    }
+                } else {
+                    Console.printErrorMessage("Item do not exist.");
+                }
+            }
+        }
     }
 
     @Override
@@ -213,8 +247,17 @@ public class ProgramUi implements ProductView {
     }
 
     @Override
-    public void setRow() {
-
+    public int setRow() {
+        String strNewRowPerPage;
+        while (true) {
+            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
+            if (strNewRowPerPage == null) {
+                continue;
+            }
+            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
+            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
+        }
+        return Integer.parseInt(strNewRowPerPage);
     }
 
     @Override

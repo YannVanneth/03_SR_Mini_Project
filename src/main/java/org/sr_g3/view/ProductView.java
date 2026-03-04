@@ -15,10 +15,10 @@ public interface ProductView {
     Optional<Product> updateProduct();
     void gotoView();
 
-    boolean deleteProduct();
+    void deleteProduct(StockManagementDao stockManagementDao);
     void backUp();
     void restore();
-    void setRow();
+    int setRow();
     void unSave();
     void save();
 }

@@ -2,6 +2,7 @@ package org.sr_g3.utils;
 
 import java.awt.*;
 import java.lang.reflect.Array;
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,12 @@ public abstract class Console {
 
     public static void print(String message){
         System.out.println(message);
+    }
+
+    public static void waitEnter() {
+        System.out.println();
+        System.out.println(Colors.YELLOW + "Press enter to continue..." + Colors.WHITE);
+        new Scanner(System.in).nextLine();
     }
 
     public static void print(String message,String pattern, int length){
