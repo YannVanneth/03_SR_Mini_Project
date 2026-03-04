@@ -1,7 +1,9 @@
 package org.sr_g3.service.impl;
 
 import org.sr_g3.dao.StockManagementDao;
+import org.sr_g3.dao.StockManagementDaoImpl;
 import org.sr_g3.model.Product;
+import org.sr_g3.model.ProductManager;
 import org.sr_g3.service.ProductService;
 
 import java.util.List;
@@ -9,15 +11,17 @@ import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
 
+    private final ProductManager productManager = new ProductManager();
     private final StockManagementDao stockManagementDao;
 
-    public ProductServiceImpl(StockManagementDao dao){
-        this.stockManagementDao = dao;
+    public ProductServiceImpl(StockManagementDao stockManagementDao) {
+        this.stockManagementDao = stockManagementDao;
     }
 
     @Override
     public void create(Product product) {
         this.stockManagementDao.addStock(product);
+        this.productManager.addProduct(product);
     }
 
     @Override
