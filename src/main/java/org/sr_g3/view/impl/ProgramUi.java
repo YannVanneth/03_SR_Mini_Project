@@ -1,17 +1,18 @@
-package org.sr_g3.view;
+package org.sr_g3.view.impl;
 
 import org.sr_g3.dao.StockManagementDao;
-import org.sr_g3.dao.StockManagementDaoImpl;
+import org.sr_g3.model.Product;
 import org.sr_g3.utils.Colors;
 import org.sr_g3.utils.Console;
 import org.sr_g3.utils.ProductTableDesign;
 import org.sr_g3.utils.Validator;
+import org.sr_g3.view.ProductView;
 
-public class ProgramUi {
+import java.util.Optional;
 
-    static StockManagementDao stockManagementDao = new StockManagementDaoImpl();
+public class ProgramUi implements ProductView {
 
-    public static void run() {
+    public void run(StockManagementDao stockManagementDao) {
 
         int limit = 5;
         int currentPage = 1;
@@ -29,7 +30,8 @@ public class ProgramUi {
 
             inputMenuBlock:
             while (true) {
-                String menuInput = Console.input("Please Choose an Option() : ", Validator.CharacterRule(), "Invalid input! please enter only text.");
+                String menuInput = Console.input("Please Choose an Option() : ", Validator.CharacterRule(),
+                        "Invalid input! please enter only text.");
 
                 if (menuInput == null) {
                     Console.printErrorMessage("Input cannot be empty.");
@@ -66,13 +68,12 @@ public class ProgramUi {
 
                     // Goto
                     case "G" -> {
-                        System.out.println("goto-page");
                         break inputMenuBlock;
                     }
 
                     // Write
                     case "W" -> {
-                        System.out.println("write");
+                        write();
                         break inputMenuBlock;
                     }
 
@@ -150,5 +151,72 @@ public class ProgramUi {
                 }
             }
         }
+    }
+
+    public Product write(){
+
+        Product model = new Product();
+
+        Console.print("Write Product", "=", 50);
+        String name = Console.input("Please enter name  : ", Validator.stringRule());
+        String price = Console.input("Please enter price : ", Validator.floatRule());
+        String qty = Console.input("Please enter quantity : ", Validator.numberRule());
+        Console.print(Colors.YELLOW + "Enter to be continue....." + Colors.WHITE);
+
+        model.setName(name);
+        model.setQuantity(Integer.parseInt(qty));
+        model.setUnit_price(Double.parseDouble(price));
+
+        return model;
+    }
+
+    @Override
+    public Optional<Product> read() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Product> searchByName() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Product> updateProduct() {
+        return Optional.empty();
+    }
+
+    @Override
+    public void gotoView() {
+
+    }
+
+    @Override
+    public boolean deleteProduct() {
+        return false;
+    }
+
+    @Override
+    public void backUp() {
+
+    }
+
+    @Override
+    public void restore() {
+
+    }
+
+    @Override
+    public void setRow() {
+
+    }
+
+    @Override
+    public void unSave() {
+
+    }
+
+    @Override
+    public void save() {
+
     }
 }

@@ -4,6 +4,6 @@ import org.sr_g3.config.app.StockManagementSystem;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        StockManagementSystem.run(args);
+        new StockManagementSystem().run(args);
     }
 }
