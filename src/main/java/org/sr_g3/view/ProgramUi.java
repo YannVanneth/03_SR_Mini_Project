@@ -2,14 +2,14 @@ package org.sr_g3.view;
 
 import org.sr_g3.dao.StockManagementDao;
 import org.sr_g3.dao.StockManagementDaoImpl;
-import org.sr_g3.utils.Colors;
-import org.sr_g3.utils.Console;
-import org.sr_g3.utils.ProductTableDesign;
-import org.sr_g3.utils.Validator;
+import org.sr_g3.utils.*;
 
 public class ProgramUi {
 
     static StockManagementDao stockManagementDao = new StockManagementDaoImpl();
+
+    static DbBackupRestoreUtil dbBackupRestoreUtil = new DbBackupRestoreUtil();
+
 
     public static void run() {
 
@@ -114,12 +114,15 @@ public class ProgramUi {
 
                     // Backup
                     case "BA" -> {
+                        dbBackupRestoreUtil.backupPGSQL(dbBackupRestoreUtil.getVersion());
+
                         System.out.println("backup");
                         break inputMenuBlock;
                     }
 
                     // Restore
                     case "RE" -> {
+                        dbBackupRestoreUtil.showBackupMenu();
                         System.out.println("restore");
                         break inputMenuBlock;
                     }

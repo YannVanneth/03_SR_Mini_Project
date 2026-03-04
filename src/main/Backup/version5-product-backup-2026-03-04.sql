@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict cwifkPVKIu7GCioqdhkKA8zM5svIY65xeRXC1uPcTbOyRI1RWeVOhylYCyumzIl
+\restrict dxZozeBHhbv30ZFC5L5bzOY6IpsEDqrUitJ9WMrMj1DHvJSxW3dBEgxlpbppvJp
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
 
--- Started on 2026-03-04 11:29:36
+-- Started on 2026-03-04 11:49:13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -126,11 +126,11 @@ ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
 
 
--- Completed on 2026-03-04 11:29:36
+-- Completed on 2026-03-04 11:49:13
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict cwifkPVKIu7GCioqdhkKA8zM5svIY65xeRXC1uPcTbOyRI1RWeVOhylYCyumzIl
+\unrestrict dxZozeBHhbv30ZFC5L5bzOY6IpsEDqrUitJ9WMrMj1DHvJSxW3dBEgxlpbppvJp
 

@@ -33,7 +33,6 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
 
 ### Mac OS ###
 .DS_Store
@@ -41,4 +40,5 @@ build/
 ### Environment variables file ###
 .env-example
 .idea/copilot.data.migration.ask2agent.xml
-.env
+config.bat
+node_modules
