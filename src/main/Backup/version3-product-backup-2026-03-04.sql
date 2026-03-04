@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict PeeY90i5xEVtyedancFNxOuARV82bMKgj74dZBKLqoGMTQItD8uxe4rd7WRtiaj
+\restrict cwifkPVKIu7GCioqdhkKA8zM5svIY65xeRXC1uPcTbOyRI1RWeVOhylYCyumzIl
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
 
--- Started on 2026-03-04 01:31:50
+-- Started on 2026-03-04 11:29:36
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -31,7 +31,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 219 (class 1259 OID 47586)
+-- TOC entry 219 (class 1259 OID 18864)
 -- Name: products; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -47,7 +47,7 @@ CREATE TABLE public.products (
 ALTER TABLE public.products OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 47594)
+-- TOC entry 220 (class 1259 OID 18872)
 -- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -63,7 +63,7 @@ CREATE SEQUENCE public.products_id_seq
 ALTER SEQUENCE public.products_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5018 (class 0 OID 0)
+-- TOC entry 4971 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -72,7 +72,7 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
--- TOC entry 221 (class 1259 OID 47595)
+-- TOC entry 221 (class 1259 OID 18873)
 -- Name: v_all_products; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -88,7 +88,7 @@ CREATE VIEW public.v_all_products AS
 ALTER VIEW public.v_all_products OWNER TO postgres;
 
 --
--- TOC entry 4860 (class 2604 OID 47599)
+-- TOC entry 4813 (class 2604 OID 18877)
 -- Name: products id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -96,36 +96,29 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
--- TOC entry 5011 (class 0 OID 47586)
+-- TOC entry 4964 (class 0 OID 18864)
 -- Dependencies: 219
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.products (id, name, unit_price, quantity, imported_date) FROM stdin;
-1	Apple	1.20	100	2026-03-01
-2	Grape	1.60	110	2026-03-01
-3	Banana	0.50	150	2026-03-01
-4	Orange	1.00	120	2026-03-01
-5	Apple premium	672.82	486	2025-05-09
-6	Pluods	512.66	551	2009-09-29
-7	Grmpe	804.50	126	2010-04-26
-8	Grape pi	706.37	826	2021-09-05
-9	Pluots core	119.56	614	2020-06-08
-10	Orange	485.02	61	2007-03-05
+1	Grape	1.60	110	2026-03-04
+2	Banana	0.50	150	2026-03-04
+3	Orange	1.00	120	2026-03-04
 \.
 
 
 --
--- TOC entry 5019 (class 0 OID 0)
+-- TOC entry 4972 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 15, true);
+SELECT pg_catalog.setval('public.products_id_seq', 3, true);
 
 
 --
--- TOC entry 4862 (class 2606 OID 47601)
+-- TOC entry 4815 (class 2606 OID 18879)
 -- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -133,11 +126,11 @@ ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
 
 
--- Completed on 2026-03-04 01:31:50
+-- Completed on 2026-03-04 11:29:36
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict PeeY90i5xEVtyedancFNxOuARV82bMKgj74dZBKLqoGMTQItD8uxe4rd7WRtiaj
+\unrestrict cwifkPVKIu7GCioqdhkKA8zM5svIY65xeRXC1uPcTbOyRI1RWeVOhylYCyumzIl
 
