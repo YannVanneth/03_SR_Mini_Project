@@ -49,6 +49,25 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
     @Override
     public int countTotalRecords() {
+
+        try {
+            Connection conn = ConnectionUtil.getDbCon();
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT COUNT(*) FROM v_all_products"
+            );
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error counting records", e);
+        }
+
         return 0;
     }
 
@@ -105,26 +124,21 @@ public class StockManagementDaoImpl implements StockManagementDao {
 
     @Override
     public void deleteStockById(long id) {
+        try{
+            var conn = ConnectionUtil.getDbCon();
+            var ps = conn.prepareStatement("""
+                       DELETE FROM v_all_products
+                       WHERE id = ?;
+                       """);
 
+            ps.setLong(1, id);
+            ps.execute();
+
+            conn.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-
-//    @Override
-//    public void deleteStock(long id) {
-//        try{
-//            var conn = ConnectionUtil.getDbCon();
-//            var ps = conn.prepareStatement("""
-//                       DELETE FROM v_all_products
-//                       WHERE id = ?;
-//                       """);
-//
-//            ps.setLong(1, id);
-//            ps.execute();
-//
-//            conn.close();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     @Override
     public Optional<Product> getProductById(Long id) {
