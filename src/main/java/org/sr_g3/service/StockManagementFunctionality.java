@@ -6,5 +6,6 @@ public interface StockManagementFunctionality {
     void backup();
     void restore();
     void exit();
-    void setRow();
+    int setRow();
+    void update();
 }

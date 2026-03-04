@@ -26,7 +26,7 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
             System.out.println();
             Console.print("Stock Management System", "=", 57, Colors.GREEN, Colors.BLUE);
-            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages);
+            ProductTableDesign.printTable(stockManagementDao.fetchStock(limit,offset), currentPage, totalPages, totalRecords);
             Console.displayTableMenu();
 
             inputMenuBlock:
@@ -128,16 +128,7 @@ public class StockManagementSystem implements StockManagementFunctionality {
 
                     // Set rows
                     case "SE" -> {
-                        String strNewRowPerPage;
-                        while (true) {
-                            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
-                            if (strNewRowPerPage == null) {
-                                continue;
-                            }
-                            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
-                            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
-                        }
-                        limit = Integer.parseInt(strNewRowPerPage);
+                        limit = setRow();
                         break inputMenuBlock;
                     }
 
@@ -180,7 +171,21 @@ public class StockManagementSystem implements StockManagementFunctionality {
     }
 
     @Override
-    public void setRow() {
+    public int setRow() {
+        String strNewRowPerPage;
+        while (true) {
+            strNewRowPerPage = Console.input("Please input number of row per page : ", Validator.numberRule(), "Please enter number only");
+            if (strNewRowPerPage == null) {
+                continue;
+            }
+            if (Integer.parseInt(strNewRowPerPage) > 0 && Integer.parseInt(strNewRowPerPage) < 100) break;
+            Console.printErrorMessage("Number must be bigger than 0 and must be smaller than 100.");
+        }
+        return Integer.parseInt(strNewRowPerPage);
+    }
+
+    @Override
+    public void update() {
 
     }
 }
