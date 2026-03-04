@@ -33,7 +33,7 @@ public class StockController implements ProductController {
 
     @Override
     public void searchByName() {
-
+        programUi.searchByName();
     }
 
     @Override
